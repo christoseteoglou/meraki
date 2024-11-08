@@ -6,12 +6,15 @@
 //
 
 import SwiftUI
+import SwiftData
 
 @main
 struct MerakiApp: App {
+    
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            HomeView()
+                .modelContainer(for: [Day.self, Thing.self])
         }
     }
 }

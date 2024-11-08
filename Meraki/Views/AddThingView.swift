@@ -6,10 +6,42 @@
 //
 
 import SwiftUI
+import SwiftData
 
 struct AddThingView: View {
+    
+    @Environment(\.dismiss) private var dismiss
+    @Environment(\.modelContext) private var context
+    @State private var thingTitle = ""
+    
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        VStack (alignment: .leading, spacing: 10) {
+            TextField("What makes you feel good?", text: $thingTitle)
+                .textFieldStyle(.roundedBorder)
+            
+            Button("Add") {
+                // Add into SwiftData
+                addThing()
+                
+                thingTitle = ""
+                
+                dismiss()
+            }
+            .buttonStyle(.borderedProminent)
+            .disabled(thingTitle.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty)
+        }
+        .padding()
+    }
+    
+    func addThing() {
+        
+        // Clean the text
+        let cleanedTitle = thingTitle.trimmingCharacters(in: .whitespacesAndNewlines)
+        
+        // Add into DB
+        context.insert(Thing(title: cleanedTitle))
+        
+        try? context.save()
     }
 }
 
